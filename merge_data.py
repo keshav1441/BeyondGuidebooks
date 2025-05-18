@@ -37,83 +37,83 @@ def safe_geocode(address, cache):
         logging.warning(f"Geocoding failed for address '{address}': {e}")
         return None
 
-def read_and_process_csv(file_path, rename_map, fixed_cols=None, extra_cols=None, state=None, city=None):
+def read_and_process_csv(file_path):
     try:
         df = pd.read_csv(file_path, encoding='latin1')
     except Exception as e:
         logging.error(f"Error reading {file_path}: {e}")
         return pd.DataFrame()
 
-    # Rename columns safely if they exist
-    for old_col, new_col in rename_map.items():
-        if old_col in df.columns:
-            df = df.rename(columns={old_col: new_col})
-        else:
-            logging.warning(f"Expected column '{old_col}' not found in {file_path}")
+    # Define common column mappings
+    name_columns = ['Centrally Protected Monument', 'Name of Monument / Sites', 'Name of Monument/Site',
+                   'Monuments', 'Name of the Monument', 'Monument Name', 'Heritage Site']
+    city_columns = ['Areas in Delhi', 'Location', 'Locality', 'City']
+    state_columns = ['State']
+    address_columns = ['Address', 'Location Address']
 
-    # Add fixed columns like state, city if provided
-    if state:
-        df['state'] = state
-    if city:
-        df['city'] = city
-    if extra_cols:
-        for col, val in extra_cols.items():
-            df[col] = val
+    # Standardize column names
+    df_cols = df.columns.str.strip()
+    
+    # Find and rename name column
+    for col in name_columns:
+        if col in df_cols:
+            df = df.rename(columns={col: 'name'})
+            break
+    
+    # Find and rename city column
+    for col in city_columns:
+        if col in df_cols:
+            df = df.rename(columns={col: 'city'})
+            break
+    
+    # Find and rename state column
+    for col in state_columns:
+        if col in df_cols:
+            df = df.rename(columns={col: 'state'})
+            break
+    
+    # Find and rename address column
+    for col in address_columns:
+        if col in df_cols:
+            df = df.rename(columns={col: 'address'})
+            break
 
-    # Build the address column safely
-    address_parts = []
-    for col in ['site_name', 'city', 'district', 'state']:
-        if col in df.columns:
-            address_parts.append(df[col].astype(str))
-    df['address'] = pd.Series([''] * len(df))
-    for i in range(len(df)):
-        parts = [part[i] for part in address_parts if part[i] != 'nan']
-        df.at[i, 'address'] = ', '.join(parts)
+    # If address column doesn't exist, create it from available information
+    if 'address' not in df.columns:
+        address_parts = []
+        if 'name' in df.columns:
+            address_parts.append(df['name'].astype(str))
+        if 'city' in df.columns:
+            address_parts.append(df['city'].astype(str))
+        if 'state' in df.columns:
+            address_parts.append(df['state'].astype(str))
+        
+        df['address'] = pd.Series([''] * len(df))
+        for i in range(len(df)):
+            parts = [part[i] for part in address_parts if part[i] != 'nan']
+            df.at[i, 'address'] = ', '.join(parts)
 
-    # Select columns present in the DataFrame for final output
-    output_cols = ['site_name', 'address']
-    for c in ['city', 'state']:
-        if c in df.columns:
-            output_cols.append(c)
+    # Ensure all required columns exist
+    required_cols = ['name', 'city', 'state', 'address']
+    for col in required_cols:
+        if col not in df.columns:
+            df[col] = None
 
-    return df[output_cols]
+    return df[required_cols]
 
 def main():
     data_dir = 'data'
-    files_info = {
-        'Heritage_Delhi.csv': {
-            'rename_map': {'Centrally Protected Monument': 'site_name', 'Areas in Delhi': 'city'},
-            'state': 'Delhi'
-        },
-        'Rajya_Sabha_Session_234_AU2266_4.csv': {
-            'rename_map': {'Name of Monument / Sites': 'site_name', 'Location': 'city', 'District': 'district'},
-            'state': 'West Bengal'
-        },
-        'rs_session-237_AU2747_1.2.csv': {
-            'rename_map': {'Name of Monument/Site': 'site_name', 'Locality': 'city', 'District': 'district'},
-            'state': 'Punjab'
-        },
-        'RS_Session_255_AU_2232_2.csv': {
-            'rename_map': {'Monuments': 'site_name'},
-            'state': 'Andhra Pradesh',
-            'city': 'Amaravati'
-        }
-    }
-
     dfs = []
-    for filename, info in files_info.items():
-        file_path = os.path.join(data_dir, filename)
-        if not os.path.isfile(file_path):
-            logging.warning(f"File not found: {file_path}. Skipping.")
+
+    # Process all CSV files in the data directory
+    for filename in os.listdir(data_dir):
+        if not filename.endswith('.csv'):
             continue
 
+        file_path = os.path.join(data_dir, filename)
         logging.info(f"Processing {filename}...")
-        df = read_and_process_csv(
-            file_path,
-            rename_map=info['rename_map'],
-            state=info.get('state'),
-            city=info.get('city')
-        )
+        
+        df = read_and_process_csv(file_path)
         if not df.empty:
             dfs.append(df)
         else:

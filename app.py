@@ -7,7 +7,7 @@ import random
 
 # Page configuration
 st.set_page_config(
-    page_title="Indian Heritage Explorer",
+    page_title="Beyond Guide Books",
     page_icon="🏛️",
     layout="wide"
 )
@@ -67,7 +67,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # App header
-st.markdown('<p class="main-header">Indian Heritage Explorer</p>', unsafe_allow_html=True)
+st.markdown('<p class="main-header">Beyond Guide Books</p>', unsafe_allow_html=True)
 st.markdown('<p class="sub-header">Discover India\'s rich cultural heritage sites</p>', unsafe_allow_html=True)
 
 # Load data

@@ -4,7 +4,7 @@ import folium
 from streamlit_folium import st_folium
 from folium.plugins import MarkerCluster
 import random
-
+from A import test_snowflake_connection
 # Page configuration
 st.set_page_config(
     page_title="Beyond Guide Books",
@@ -72,34 +72,27 @@ st.markdown('<p class="sub-header">Discover India\'s rich cultural heritage site
 
 # Load data
 @st.cache_data
+@st.cache_data(ttl=600)
 def load_data():
     try:
-        df = pd.read_csv("data/final_heritage_data.csv")
-        
-        # Ensure required columns exist
-        required_columns = ['Site Name', 'City', 'State', 'Latitude', 'Longitude']
-        if not all(col in df.columns for col in required_columns):
-            st.error("CSV file doesn't contain all required columns")
-            return pd.DataFrame()
-        
-        # Clean data
+        df = test_snowflake_connection()
+
+        # Clean and standardize
         df = df.dropna(subset=['Latitude', 'Longitude'])
         df = df.drop_duplicates(subset=['Site Name', 'City', 'State'])
-        
-        # Convert coordinates to numeric
+
         df['Latitude'] = pd.to_numeric(df['Latitude'], errors='coerce')
         df['Longitude'] = pd.to_numeric(df['Longitude'], errors='coerce')
         df = df.dropna(subset=['Latitude', 'Longitude'])
-        
-        # Add some derived columns
-        df['Category'] = df['Site Name'].apply(lambda x: 'Temple' if 'temple' in str(x).lower() 
-                                             else 'Fort' if 'fort' in str(x).lower()
-                                             else 'Mosque' if 'masjid' in str(x).lower()
-                                             else 'Monument')        
+
+        df['Category'] = df['Site Name'].apply(lambda x: 'Temple' if 'temple' in str(x).lower()
+                                                else 'Fort' if 'fort' in str(x).lower()
+                                                else 'Mosque' if 'masjid' in str(x).lower()
+                                                else 'Monument')
         return df
 
     except Exception as e:
-        st.error(f"Failed to load data: {str(e)}")
+        st.error(f"Failed to load data from Snowflake: {str(e)}")
         return pd.DataFrame()
 
 df = load_data()

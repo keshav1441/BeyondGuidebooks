@@ -1,156 +1,69 @@
-import pandas as pd
 import os
-import logging
-import time
-from geopy.geocoders import Nominatim
-from geopy.extra.rate_limiter import RateLimiter
-from tqdm import tqdm  # for progress bar
-import pickle
+import pandas as pd
+from groq import Groq
+from tqdm import tqdm
 
-# Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Configure Groq
+client = Groq(api_key="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")  # Replace with your actual key
 
-# Initialize geocoder
-geolocator = Nominatim(user_agent="heritage_sites_merger")
-geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1, max_retries=3, error_wait_seconds=10)
+# Folder with CSVs
+data_folder = "data"
+output_file = "final_heritage_data.csv"
 
-CACHE_FILE = 'geocode_cache.pkl'
+# Collect unique site names
+site_names = set()
+csv_files = [os.path.join(data_folder, f) for f in os.listdir(data_folder) if f.endswith(".csv")]
 
-def load_geocode_cache():
-    if os.path.exists(CACHE_FILE):
-        with open(CACHE_FILE, 'rb') as f:
-            return pickle.load(f)
-    return {}
-
-def save_geocode_cache(cache):
-    with open(CACHE_FILE, 'wb') as f:
-        pickle.dump(cache, f)
-
-def safe_geocode(address, cache):
-    if address in cache:
-        return cache[address]
+for file in csv_files:
     try:
-        location = geocode(address)
-        cache[address] = location
-        return location
+        df = pd.read_csv(file, header=None, encoding="latin1")
+        for row in df.itertuples(index=False):
+            for col in row:
+                if isinstance(col, str) and len(col.strip().split()) > 1:
+                    site_names.add(col.strip())
     except Exception as e:
-        logging.warning(f"Geocoding failed for address '{address}': {e}")
-        return None
+        print(f"Error reading {file}: {e}")
 
-def read_and_process_csv(file_path):
+# Prompt generator
+def make_prompt(site_name):
+    return f"""
+You are a helpful AI assistant. Given the name of a heritage site, return a single CSV row with the format:
+Site Name, City, State, Latitude, Longitude
+
+Example:
+Taj Mahal, Agra, Uttar Pradesh, 27.1751, 78.0421
+
+Now do the same for: {site_name}
+Just return the row, no explanation.
+"""
+
+# Query Groq API
+def query_groq(site_name):
+    prompt = make_prompt(site_name)
+    completion = client.chat.completions.create(
+        model="meta-llama/llama-4-scout-17b-16e-instruct",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.2,
+        max_tokens=150,
+        top_p=1.0,
+        stream=False,
+    )
+    return completion.choices[0].message.content.strip()
+
+# Generate structured data
+results = []
+for site in tqdm(sorted(site_names), desc="Processing sites"):
     try:
-        df = pd.read_csv(file_path, encoding='latin1')
+        row = query_groq(site)
+        if row.count(",") >= 4:  # crude check for 5 columns
+            results.append(row)
     except Exception as e:
-        logging.error(f"Error reading {file_path}: {e}")
-        return pd.DataFrame()
+        print(f"Failed to process '{site}': {e}")
 
-    # Define common column mappings
-    name_columns = ['Centrally Protected Monument', 'Name of Monument / Sites', 'Name of Monument/Site',
-                   'Monuments', 'Name of the Monument', 'Monument Name', 'Heritage Site']
-    city_columns = ['Areas in Delhi', 'Location', 'Locality', 'City']
-    state_columns = ['State']
-    address_columns = ['Address', 'Location Address']
+# Write final CSV
+with open(output_file, "w", encoding="utf-8") as f:
+    f.write("Site Name,City,State,Latitude,Longitude\n")
+    for row in results:
+        f.write(row + "\n")
 
-    # Standardize column names
-    df_cols = df.columns.str.strip()
-    
-    # Find and rename name column
-    for col in name_columns:
-        if col in df_cols:
-            df = df.rename(columns={col: 'name'})
-            break
-    
-    # Find and rename city column
-    for col in city_columns:
-        if col in df_cols:
-            df = df.rename(columns={col: 'city'})
-            break
-    
-    # Find and rename state column
-    for col in state_columns:
-        if col in df_cols:
-            df = df.rename(columns={col: 'state'})
-            break
-    
-    # Find and rename address column
-    for col in address_columns:
-        if col in df_cols:
-            df = df.rename(columns={col: 'address'})
-            break
-
-    # If address column doesn't exist, create it from available information
-    if 'address' not in df.columns:
-        address_parts = []
-        if 'name' in df.columns:
-            address_parts.append(df['name'].astype(str))
-        if 'city' in df.columns:
-            address_parts.append(df['city'].astype(str))
-        if 'state' in df.columns:
-            address_parts.append(df['state'].astype(str))
-        
-        df['address'] = pd.Series([''] * len(df))
-        for i in range(len(df)):
-            parts = [part[i] for part in address_parts if part[i] != 'nan']
-            df.at[i, 'address'] = ', '.join(parts)
-
-    # Ensure all required columns exist
-    required_cols = ['name', 'city', 'state', 'address']
-    for col in required_cols:
-        if col not in df.columns:
-            df[col] = None
-
-    return df[required_cols]
-
-def main():
-    data_dir = 'data'
-    dfs = []
-
-    # Process all CSV files in the data directory
-    for filename in os.listdir(data_dir):
-        if not filename.endswith('.csv'):
-            continue
-
-        file_path = os.path.join(data_dir, filename)
-        logging.info(f"Processing {filename}...")
-        
-        df = read_and_process_csv(file_path)
-        if not df.empty:
-            dfs.append(df)
-        else:
-            logging.warning(f"No data loaded from {filename}.")
-
-    if not dfs:
-        logging.error("No data to merge. Exiting.")
-        return
-
-    merged_df = pd.concat(dfs, ignore_index=True)
-
-    # Load or create geocode cache
-    geocode_cache = load_geocode_cache()
-
-    logging.info("Geocoding addresses... (this may take some time)")
-
-    latitudes = []
-    longitudes = []
-
-    for address in tqdm(merged_df['address'], desc="Geocoding"):
-        loc = safe_geocode(address, geocode_cache)
-        if loc:
-            latitudes.append(loc.latitude)
-            longitudes.append(loc.longitude)
-        else:
-            latitudes.append(None)
-            longitudes.append(None)
-
-    merged_df['latitude'] = latitudes
-    merged_df['longitude'] = longitudes
-
-    # Save cache for next time
-    save_geocode_cache(geocode_cache)
-
-    output_path = os.path.join(data_dir, 'merged_heritage_sites.csv')
-    merged_df.to_csv(output_path, index=False)
-    logging.info(f"Merged data saved to {output_path}")
-
-if __name__ == "__main__":
-    main()
+print(f"\n✅ Done! Saved to {output_file}")

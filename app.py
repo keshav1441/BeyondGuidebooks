@@ -95,11 +95,7 @@ def load_data():
         df['Category'] = df['Site Name'].apply(lambda x: 'Temple' if 'temple' in str(x).lower() 
                                              else 'Fort' if 'fort' in str(x).lower()
                                              else 'Mosque' if 'masjid' in str(x).lower()
-                                             else 'Monument')
-        
-        df['Popularity'] = [random.randint(1, 5) for _ in range(len(df))]
-        df['UNESCO'] = [random.choice([True, False]) for _ in range(len(df))]
-        
+                                             else 'Monument')        
         return df
 
     except Exception as e:
@@ -123,27 +119,7 @@ with st.sidebar:
     categories = ["All Categories"] + sorted(df['Category'].dropna().unique().tolist())
     selected_category = st.selectbox("Select Category:", categories)
     
-    # Additional filters
-    col1, col2 = st.columns(2)
-    with col1:
-        unesco_filter = st.checkbox("UNESCO Sites Only")
-    with col2:
-        min_popularity = st.slider("Min Popularity", 1, 5, 1)
-    
     st.markdown("---")
-    st.markdown("**Quick Filters**")
-    
-    # Quick filter buttons
-    btn_cols = st.columns(3)
-    with btn_cols[0]:
-        if st.button("🏰 Forts"):
-            selected_category = "Fort"
-    with btn_cols[1]:
-        if st.button("🛕 Temples"):
-            selected_category = "Temple"
-    with btn_cols[2]:
-        if st.button("🕌 Mosques"):
-            selected_category = "Mosque"
 
 # Apply filters
 filtered_df = df.copy()
@@ -153,9 +129,6 @@ if selected_state != "All States":
     filtered_df = filtered_df[filtered_df['State'] == selected_state]
 if selected_category != "All Categories":
     filtered_df = filtered_df[filtered_df['Category'] == selected_category]
-if unesco_filter:
-    filtered_df = filtered_df[filtered_df['UNESCO'] == True]
-filtered_df = filtered_df[filtered_df['Popularity'] >= min_popularity]
 
 # Main content layout
 if not filtered_df.empty:
@@ -183,8 +156,6 @@ if not filtered_df.empty:
                     <h4>{row['Site Name']}</h4>
                     <p><b>Location:</b> {row['City']}, {row['State']}</p>
                     <p><b>Category:</b> {row['Category']}</p>
-                    <p><b>Popularity:</b> {"⭐" * row['Popularity']}</p>
-                    {f'<p><b>UNESCO World Heritage Site</b></p>' if row['UNESCO'] else ''}
                 </div>
                 """
                 folium.Marker(
@@ -202,18 +173,13 @@ if not filtered_df.empty:
         st.subheader("🏆 Featured Sites")
         st.markdown(f"**Found {len(filtered_df)} sites** matching your criteria")
         
-        # Sort by popularity
-        top_sites = filtered_df.sort_values('Popularity', ascending=False).head(10)
-        
         # Display site cards
-        for _, site in top_sites.iterrows():
+        for _, site in filtered_df.iterrows():
             with st.expander(f"{site['Site Name']} ({site['City']})", expanded=False):
                 st.markdown(f"""
                 <div class="site-card">
                     <p><b>Location:</b> {site['City']}, {site['State']}</p>
                     <p><b>Category:</b> {site['Category']}</p>
-                    <p><b>Popularity:</b> {"⭐" * site['Popularity']}</p>
-                    {f'<p><b>UNESCO World Heritage Site</b></p>' if site['UNESCO'] else ''}
                 </div>
                 """, unsafe_allow_html=True)
                 

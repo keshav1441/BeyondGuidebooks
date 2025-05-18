@@ -53,10 +53,18 @@ st.markdown('<p class="sub-header">Explore India\'s rich cultural heritage and t
 @st.cache_data
 def load_data():
     try:
-        df = pd.read_csv("data/Heritage_Ahemadabad.csv", header=None, names=[
-            "Name of Monument/Site", "Locality/District", "State", "Region", "Latitude", "Longitude"
-        ])
+        df = pd.read_csv("data/final_heritage_data.csv", header=0)
         
+        df = df.rename(columns={
+            'Site Name': 'Name of Monument/Site',
+            'City': 'Locality/District',
+            'State': 'Region'
+        })
+        
+        df['Latitude'] = pd.to_numeric(df['Latitude'], errors='coerce')
+        df['Longitude'] = pd.to_numeric(df['Longitude'], errors='coerce')
+        df = df.dropna(subset=['Latitude', 'Longitude'])
+
         def categorize_site(name):
             name = name.lower()
             if 'temple' in name or 'mandir' in name:
@@ -80,6 +88,7 @@ def load_data():
         return pd.DataFrame()
 
 df = load_data()
+print(df.head())  # Debugging line to check the data
 
 # Sidebar filters
 with st.sidebar:

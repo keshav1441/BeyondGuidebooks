@@ -2,9 +2,14 @@ import os
 import pandas as pd
 from groq import Groq
 from tqdm import tqdm
+import dotenv
+
+# Load environment variables
+dotenv.load_dotenv()
+GROK_API_KEY = os.getenv("GROK_API_KEY")
 
 # Configure Groq
-client = Groq(api_key="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")  # Replace with your actual key
+client = Groq(api_key=GROK_API_KEY)  # Replace with your actual key
 
 # Folder with CSVs
 data_folder = "data"

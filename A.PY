@@ -28,6 +28,8 @@ def test_snowflake_connection():
 
         print("Data from Snowflake SITES table:")
         print(df)
+        
+        return df
 
     finally:
         cursor.close()

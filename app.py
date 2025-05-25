@@ -5,6 +5,7 @@ from streamlit_folium import st_folium
 from folium.plugins import MarkerCluster
 import random
 from A import test_snowflake_connection
+
 # Page configuration
 st.set_page_config(
     page_title="Beyond Guide Books",
@@ -71,24 +72,31 @@ st.markdown('<p class="main-header">Beyond Guide Books</p>', unsafe_allow_html=T
 st.markdown('<p class="sub-header">Discover India\'s rich cultural heritage sites</p>', unsafe_allow_html=True)
 
 # Load data
-@st.cache_data
 @st.cache_data(ttl=600)
 def load_data():
     try:
         df = test_snowflake_connection()
+        
 
-        # Clean and standardize
-        df = df.dropna(subset=['Latitude', 'Longitude'])
-        df = df.drop_duplicates(subset=['Site Name', 'City', 'State'])
+        
+        if df.empty:
+            st.error("No data received from Snowflake")
+            return pd.DataFrame()
 
-        df['Latitude'] = pd.to_numeric(df['Latitude'], errors='coerce')
-        df['Longitude'] = pd.to_numeric(df['Longitude'], errors='coerce')
-        df = df.dropna(subset=['Latitude', 'Longitude'])
+        # Clean and standardize - using actual column names
+        df = df.dropna(subset=['LATITUDE', 'LONGITUDE'])
+        df = df.drop_duplicates(subset=['SITE_NAME', 'CITY'])
 
-        df['Category'] = df['Site Name'].apply(lambda x: 'Temple' if 'temple' in str(x).lower()
+        df['LATITUDE'] = pd.to_numeric(df['LATITUDE'], errors='coerce')
+        df['LONGITUDE'] = pd.to_numeric(df['LONGITUDE'], errors='coerce')
+        df = df.dropna(subset=['LATITUDE', 'LONGITUDE'])
+
+        # Create category based on site name
+        df['Category'] = df['SITE_NAME'].apply(lambda x: 'Temple' if 'temple' in str(x).lower()
                                                 else 'Fort' if 'fort' in str(x).lower()
-                                                else 'Mosque' if 'masjid' in str(x).lower()
+                                                else 'Mosque' if 'masjid' in str(x).lower() or 'mosque' in str(x).lower()
                                                 else 'Monument')
+        
         return df
 
     except Exception as e:
@@ -97,6 +105,11 @@ def load_data():
 
 df = load_data()
 
+# Check if data is loaded successfully
+if df.empty:
+    st.error("No data available. Please check your Snowflake connection.")
+    st.stop()
+
 # Sidebar filters
 with st.sidebar:
     st.header("🔍 Filter Heritage Sites")
@@ -104,22 +117,28 @@ with st.sidebar:
     # Search by name
     search_term = st.text_input("Search by site name:", "")
     
-    # State filter
-    states = ["All States"] + sorted(df['State'].dropna().unique().tolist())
-    selected_state = st.selectbox("Select State:", states)
+    # City filter (since we don't have State)
+    cities = ["All Cities"] + sorted(df['CITY'].dropna().unique().tolist())
+    selected_city = st.selectbox("Select City:", cities)
     
     # Category filter
     categories = ["All Categories"] + sorted(df['Category'].dropna().unique().tolist())
     selected_category = st.selectbox("Select Category:", categories)
     
     st.markdown("---")
+    
+    # Show data info
+    st.markdown(f"**Total Sites:** {len(df)}")
 
 # Apply filters
 filtered_df = df.copy()
+
 if search_term:
-    filtered_df = filtered_df[filtered_df['Site Name'].str.contains(search_term, case=False, na=False)]
-if selected_state != "All States":
-    filtered_df = filtered_df[filtered_df['State'] == selected_state]
+    filtered_df = filtered_df[filtered_df['SITE_NAME'].str.contains(search_term, case=False, na=False)]
+
+if selected_city != "All Cities":
+    filtered_df = filtered_df[filtered_df['CITY'] == selected_city]
+
 if selected_category != "All Categories":
     filtered_df = filtered_df[filtered_df['Category'] == selected_category]
 
@@ -146,16 +165,16 @@ if not filtered_df.empty:
                 
                 popup_html = f"""
                 <div style="width: 250px;">
-                    <h4>{row['Site Name']}</h4>
-                    <p><b>Location:</b> {row['City']}, {row['State']}</p>
+                    <h4>{row['SITE_NAME']}</h4>
+                    <p><b>Location:</b> {row['CITY']}</p>
                     <p><b>Category:</b> {row['Category']}</p>
                 </div>
                 """
                 folium.Marker(
-                    location=[row['Latitude'], row['Longitude']],
+                    location=[row['LATITUDE'], row['LONGITUDE']],
                     popup=folium.Popup(popup_html, max_width=300),
                     icon=folium.Icon(color=icon_color, icon='info-sign'),
-                    tooltip=row['Site Name']
+                    tooltip=row['SITE_NAME']
                 ).add_to(marker_cluster)
             
             # Display the map
@@ -168,16 +187,17 @@ if not filtered_df.empty:
         
         # Display site cards
         for _, site in filtered_df.iterrows():
-            with st.expander(f"{site['Site Name']} ({site['City']})", expanded=False):
+            with st.expander(f"{site['SITE_NAME']} ({site['CITY']})", expanded=False):
                 st.markdown(f"""
                 <div class="site-card">
-                    <p><b>Location:</b> {site['City']}, {site['State']}</p>
+                    <p><b>Location:</b> {site['CITY']}</p>
                     <p><b>Category:</b> {site['Category']}</p>
+                    <p><b>Coordinates:</b> {site['LATITUDE']:.6f}, {site['LONGITUDE']:.6f}</p>
                 </div>
                 """, unsafe_allow_html=True)
                 
                 # Show directions button
-                maps_link = f"https://www.google.com/maps?q={site['Latitude']},{site['Longitude']}"
+                maps_link = f"https://www.google.com/maps?q={site['LATITUDE']},{site['LONGITUDE']}"
                 st.markdown(f"""
                 <a href="{maps_link}" target="_blank" style="text-decoration: none;">
                     <button style="
@@ -195,13 +215,33 @@ if not filtered_df.empty:
 else:
     st.warning("No heritage sites match your current filters. Try adjusting your search criteria.")
 
+# Show some statistics
+if not df.empty:
+    st.markdown("---")
+    st.subheader("📊 Site Statistics")
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.metric("Total Sites", len(df))
+    
+    with col2:
+        st.metric("Cities", len(df['CITY'].unique()))
+    
+    with col3:
+        temples_count = len(df[df['Category'] == 'Temple'])
+        st.metric("Temples", temples_count)
+    
+    with col4:
+        forts_count = len(df[df['Category'] == 'Fort'])
+        st.metric("Forts", forts_count)
+
 # Footer
 st.markdown("---")
 st.markdown(
     """
     <div style="text-align: center; color: #6B7280; font-size: 0.9rem;">
         <p>Created with ❤️ to explore India's cultural heritage</p>
-        <p>Data sourced from various heritage listings and archaeological surveys</p>
+        <p>Data sourced from Snowflake heritage database</p>
     </div>
     """,
     unsafe_allow_html=True

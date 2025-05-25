@@ -54,8 +54,8 @@ st.markdown("""
     }
     .site-card {
         border-radius: 10px;
-        padding: 1rem;
-        margin-bottom: 1rem;
+        padding: 0.5rem !important;
+        margin-bottom: 0.5rem !important;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         border-left: 4px solid #4f46e5;
     }
@@ -63,6 +63,58 @@ st.markdown("""
         border-radius: 10px;
         overflow: hidden;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* CRITICAL SPACING FIXES */
+    .main .block-container {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+        max-width: 100% !important;
+    }
+    
+    /* Remove extra spacing between elements */
+    .element-container {
+        margin-bottom: 0.25rem !important;
+    }
+    
+    /* Compact columns */
+    div[data-testid="column"] {
+        padding: 0 0.25rem !important;
+        gap: 0.5rem !important;
+    }
+    
+    /* Compact expanders */
+    .streamlit-expanderHeader {
+        padding: 0.25rem 0.5rem !important;
+        margin-bottom: 0.1rem !important;
+    }
+    
+    .streamlit-expanderContent {
+        padding: 0.5rem !important;
+    }
+    
+    /* Remove extra space around metrics */
+    div[data-testid="metric-container"] {
+        margin-bottom: 0.25rem !important;
+        padding: 0.25rem !important;
+    }
+    
+    /* Compact the right column */
+    .sites-list {
+        max-height: 580px !important;
+        overflow-y: auto !important;
+        padding-right: 5px !important;
+    }
+    
+    /* Remove space after map */
+    iframe[title="streamlit_folium.st_folium"] {
+        margin-bottom: 0 !important;
+    }
+    
+    /* Compact headings */
+    .stMarkdown h3 {
+        margin-top: 0.5rem !important;
+        margin-bottom: 0.25rem !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -76,8 +128,6 @@ st.markdown('<p class="sub-header">Discover India\'s rich cultural heritage site
 def load_data():
     try:
         df = test_snowflake_connection()
-        
-
         
         if df.empty:
             st.error("No data received from Snowflake")
@@ -127,8 +177,14 @@ with st.sidebar:
     
     st.markdown("---")
     
-    # Show data info
+    # Move statistics to sidebar to save space
+    st.markdown("**📊 Quick Stats**")
     st.markdown(f"**Total Sites:** {len(df)}")
+    st.markdown(f"**Cities:** {len(df['CITY'].unique())}")
+    temples_count = len(df[df['Category'] == 'Temple'])
+    st.markdown(f"**Temples:** {temples_count}")
+    forts_count = len(df[df['Category'] == 'Fort'])
+    st.markdown(f"**Forts:** {forts_count}")
 
 # Apply filters
 filtered_df = df.copy()
@@ -144,8 +200,8 @@ if selected_category != "All Categories":
 
 # Main content layout
 if not filtered_df.empty:
-    # Map and details layout
-    col1, col2 = st.columns([7, 3])
+    # Map and details layout - adjusted column ratio for better balance
+    col1, col2 = st.columns([8, 2])
     
     with col1:
         st.subheader("📍 Interactive Map")
@@ -163,13 +219,32 @@ if not filtered_df.empty:
                     'Monument': 'purple'
                 }.get(row['Category'], 'red')
                 
+                # Create directions link
+                maps_link = f"https://www.google.com/maps?q={row['LATITUDE']},{row['LONGITUDE']}"
+                
                 popup_html = f"""
                 <div style="width: 250px;">
                     <h4>{row['SITE_NAME']}</h4>
                     <p><b>Location:</b> {row['CITY']}</p>
                     <p><b>Category:</b> {row['Category']}</p>
+                    <p style="margin:0.2rem 0; font-size:0.8rem;"><b>Co-ordinates:</b> {row['LATITUDE']:.4f}, {row['LONGITUDE']:.4f}</p>
+                    <a href="{maps_link}" target="_blank" style="text-decoration: none;">
+                        <button style="
+                            background-color: #4f46e5;
+                            color: white;
+                            border: none;
+                            padding: 0.3rem 0.6rem;
+                            border-radius: 6px;
+                            cursor: pointer;
+                            width: 100%;
+                            text-align: center;
+                            font-size: 0.85rem;
+                            margin-top: 0.5rem;
+                        ">📍 Get Directions</button>
+                    </a>
                 </div>
                 """
+                
                 folium.Marker(
                     location=[row['LATITUDE'], row['LONGITUDE']],
                     popup=folium.Popup(popup_html, max_width=300),
@@ -182,21 +257,26 @@ if not filtered_df.empty:
                 st_data = st_folium(m, width="100%", height=600)
     
     with col2:
-        st.subheader("🏆 Featured Sites")
-        st.markdown(f"**Found {len(filtered_df)} sites** matching your criteria")
+        st.subheader("🏆 Top 5 Sites")
+        total_sites = len(filtered_df)
+        showing_count = min(5, total_sites)
+        st.markdown(f"**Showing {showing_count} of {total_sites} sites**")
         
-        # Display site cards
-        for _, site in filtered_df.iterrows():
-            with st.expander(f"{site['SITE_NAME']} ({site['CITY']})", expanded=False):
+        # Create scrollable container for site list
+        st.markdown('<div class="sites-list">', unsafe_allow_html=True)
+        
+        # Display only top 5 site cards
+        for _, site in filtered_df.head(5).iterrows():
+            with st.expander(f"{site['SITE_NAME'][:25]}{'...' if len(site['SITE_NAME']) > 25 else ''}", expanded=False):
                 st.markdown(f"""
                 <div class="site-card">
-                    <p><b>Location:</b> {site['CITY']}</p>
-                    <p><b>Category:</b> {site['Category']}</p>
-                    <p><b>Coordinates:</b> {site['LATITUDE']:.6f}, {site['LONGITUDE']:.6f}</p>
+                    <p style="margin:0.2rem 0;"><b>City:</b> {site['CITY']}</p>
+                    <p style="margin:0.2rem 0;"><b>Type:</b> {site['Category']}</p>
+                    <p style="margin:0.2rem 0; font-size:0.8rem;"><b>Coords:</b> {site['LATITUDE']:.4f}, {site['LONGITUDE']:.4f}</p>
                 </div>
                 """, unsafe_allow_html=True)
                 
-                # Show directions button
+                # Compact directions button
                 maps_link = f"https://www.google.com/maps?q={site['LATITUDE']},{site['LONGITUDE']}"
                 st.markdown(f"""
                 <a href="{maps_link}" target="_blank" style="text-decoration: none;">
@@ -204,44 +284,31 @@ if not filtered_df.empty:
                         background-color: #4f46e5;
                         color: white;
                         border: none;
-                        padding: 0.5rem 1rem;
-                        border-radius: 8px;
+                        padding: 0.3rem 0.6rem;
+                        border-radius: 6px;
                         cursor: pointer;
                         width: 100%;
                         text-align: center;
-                    ">Get Directions</button>
+                        font-size: 0.85rem;
+                    ">📍 Get Directions</button>
                 </a>
                 """, unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Show note if there are more sites
+        if total_sites > 5:
+            st.markdown(f"<small style='color: #6B7280;'>📍 {total_sites - 5} more sites available on map</small>", unsafe_allow_html=True)
+
 else:
     st.warning("No heritage sites match your current filters. Try adjusting your search criteria.")
 
-# Show some statistics
-if not df.empty:
-    st.markdown("---")
-    st.subheader("📊 Site Statistics")
-    col1, col2, col3, col4 = st.columns(4)
-    
-    with col1:
-        st.metric("Total Sites", len(df))
-    
-    with col2:
-        st.metric("Cities", len(df['CITY'].unique()))
-    
-    with col3:
-        temples_count = len(df[df['Category'] == 'Temple'])
-        st.metric("Temples", temples_count)
-    
-    with col4:
-        forts_count = len(df[df['Category'] == 'Fort'])
-        st.metric("Forts", forts_count)
-
-# Footer
+# Footer - more compact
 st.markdown("---")
 st.markdown(
     """
-    <div style="text-align: center; color: #6B7280; font-size: 0.9rem;">
-        <p>Created with ❤️ to explore India's cultural heritage</p>
-        <p>Data sourced from Snowflake heritage database</p>
+    <div style="text-align: center; color: #6B7280; font-size: 0.8rem; padding: 0.5rem;">
+        <p style="margin:0;">Created with ❤️ to explore India's cultural heritage • Data from Snowflake</p>
     </div>
     """,
     unsafe_allow_html=True

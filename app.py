@@ -209,8 +209,8 @@ with st.sidebar:
     search_term = st.text_input("Search by site name:", "")
     
     # City filter (since we don't have State)
-    cities = ["All Cities"] + sorted(df['CITY'].dropna().unique().tolist())
-    selected_city = st.selectbox("Select City:", cities)
+    states = ["All States"] + sorted(df['STATE'].dropna().unique().tolist())
+    selected_city = st.selectbox("Select States:", states)
     
     # Category filter
     categories = ["All Categories"] + sorted(df['Category'].dropna().unique().tolist())
@@ -233,8 +233,8 @@ filtered_df = df.copy()
 if search_term:
     filtered_df = filtered_df[filtered_df['SITE_NAME'].str.contains(search_term, case=False, na=False)]
 
-if selected_city != "All Cities":
-    filtered_df = filtered_df[filtered_df['CITY'] == selected_city]
+if selected_city != "All States":
+    filtered_df = filtered_df[filtered_df['STATE'] == selected_city]
 
 if selected_category != "All Categories":
     filtered_df = filtered_df[filtered_df['Category'] == selected_category]

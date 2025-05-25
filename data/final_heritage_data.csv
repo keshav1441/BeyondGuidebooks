@@ -1,99 +1,76 @@
 site_name,city,state,latitude,longitude
-Durga Temple, Varanasi, Uttar Pradesh, 25.294615640901597, 82.99847926811071
-Lingraj Temple, Bhubaneswar, Odisha, 20.243678187620386, 85.83298425249738
-Annapurna Temple, Barrakpore, West Bengal, 22.750636655573953, 88.36548271046574
-Mallikarjuna Temple, Hyderabad, Karnataka, 17.52086363154297, 78.3777106952267
-Shri Ahichhatra Parshwanath Jain Tirth, Ahichhatra, Uttar Pradesh, 28.37333123556853, 79.11832948015793
-Shri Agasthyeshwara Temple, Kirimanjeshwar, Karnataka, 13.766926337172437, 74.63220852209845
-Amruteshwara Temple, Annigeri, Karnataka, 15.423889076372234, 75.4326804528124
-Shri Aprameya Swamy Temple, Channapatna, Karnataka, 12.647402663512086, 77.17960953742387
-Amaranarayana Temple, Draksharama, Andhra Pradesh, 13.347914462371335, 77.98593852394131
-Rameshwaram Temple, Rameswaram, Tamil Nadu, 9.289919333241006, 79.3174196687874
-Shri Achleshwar Mahadev Temple, Gwalior, Madhya Pradesh, 26.198797496582344, 78.16503101076644
-Sun Temple, Konark, Odisha, 19.88771634930262, 86.09455785290957
-Ardhanari Nateshwar Temple, Velapur, Maharashtra, 17.79181998173491, 75.05387740868217
-Ashoka Pillar, Delhi, Delhi, 28.674086589969125, 77.2118727820186
-Lalbagh Garden, Bengaluru, Karnataka, 22.70307802050886, 75.84689165298552
-Bhimeshwara Swamy Temple, Bhimavaram, Andhra Pradesh, 16.793137292769522, 82.06325168795854
-Sree Padmanabhaswamy Temple, Thiruvananthapuram, Kerala, 8.901985298988734, 76.96050260637102
-Bhangarh Fort, Alwar, Rajasthan, 27.094877818432433, 76.29133198196163
-Begampuri Masjid, Begampur, West Bengal, 28.539429254611225, 77.20688191084923
-Bekal Fort, Bekal, Kerala, 12.393128343463019, 75.03355299509151
-Belgaum fort, Belgaum, Karnataka, 15.859645495771215, 74.52431647980671
-Biran-Ka-Gumbad-282, Delhi, Delhi, 28.555782897228717, 77.2028583378359
-Ajanta Caves, Aurangabad, Maharashtra, 20.551539547519344, 75.70694632409081
-Sanchi Stupa, Sanchi, Madhya Pradesh, 23.47963083230264, 77.73956293581635
-Mysuru Shri Chamundeshwari Devi Temple, Mysore, Karnataka, 12.272727344698955, 76.67072139508977
-Sri Chennakeshava Swamy Temple, Belur, Karnataka, 13.163099397488637, 75.86034252393846
-CHOKKANATHESWHARA TEMPLE, Kanchipuram, Tamil Nadu, 12.8353, 79.6992
-Khaspur Ruins Of Kachari Kingdom Palace, Karimganj, Assam, 24.933468142472286, 92.93158236839608
-Maa Mahishasura Mardini Chaiturgarh, Bilaspur, Chhattisgarh, 22.51098955494924, 82.27167218366505
-Shri Gourishwara Swamy Temple (Yelanduru), Yelandur, Karnataka, 12.047945166396627, 77.02984563393245
-Chashme Shahi Garden, Srinagar, Jammu and Kashmir, 34.16345663548204, 74.90227452453303
-Nand Bhavan 84 khamma Old Gokul Mahavan, Mahaban, Uttar Pradesh,27.429195198862573, 77.74149312615158
-Tomb of Mirza Nizammudin Aziz-ka-Kokaltash, New Delhi, Delhi, 28.591704952074313, 77.2431453412902
+Durga Temple, Varanasi, Uttar Pradesh, 25.28874366898255, 82.99914938264759
+Lingraj Temple, Bhubaneswar, Odisha, 20.238673294612372, 85.83381958416948
+Annapurna Temple, Barrakpore, West Bengal, 22.87432405989529, 88.3767117798577
+Mallikarjuna Temple, Hyderabad, Karnataka, 17.52091478702148, 78.37774288173362
+Shri Ahichhatra Parshwanath Jain Tirth, Ahichhatra, Uttar Pradesh, 28.373170755798956, 79.1184045820074
+Shri Agasthyeshwara Temple, Kirimanjeshwar, Karnataka, 12.988420262940151, 80.14243356062305
+Amruteshwara Temple, Annigeri, Karnataka, 13.74189658180522, 75.85368636023813
+Shri Aprameya Swamy Temple, Channapatna, Karnataka, 12.647437052371453, 77.17962927790305
+Amaranarayana Temple, Draksharama, Andhra Pradesh, 13.34797706292917, 77.98589558112634
+Rameshwaram Temple, Rameswaram, Tamil Nadu, 9.289548882256966, 79.31744213738342
+Shri Achleshwar Mahadev Temple, Gwalior, Madhya Pradesh, 26.456768383968218, 78.08395752616664
+Sun Temple, Konark, Odisha, 19.887766746492662, 86.09452563982404
+Ardhanari Nateshwar Temple, Velapur, Maharashtra, 17.791850628856587, 75.05386667984654
+Ashoka Pillar, Delhi, Delhi, 28.674058350705884, 77.21181913784041
+Lalbagh Garden, Bengaluru, Karnataka, 22.7031176106523, 75.84687019531425
+Bhimeshwara Swamy Temple, Bhimavaram, Andhra Pradesh, 17.117940317406113, 82.15898617285251
+Sree Padmanabhaswamy Temple, Thiruvananthapuram, Kerala, 8.482958264691154, 76.94359056714093
+Bhangarh Fort, Alwar, Rajasthan, 27.096630011431856, 76.28626909545481
+Begampuri Masjid, Begampur, West Bengal, 28.539438679770125, 77.2069570126987
+Bekal Fort, Bekal, Kerala, 12.393117864630026, 75.03348862207768
+Belagavi fort, Belgaum, Karnataka, 15.859655816203206, 74.52432720864235
+Biran-Ka-Gumbad, Delhi, Delhi, 28.555811105694573, 77.20287977064235
+Ajanta Caves, Aurangabad, Maharashtra, 20.551579731587122, 75.70697851059772
+Sanchi Stupa, Sanchi, Madhya Pradesh, 23.47961756155193, 77.73960688396696
+Mysuru Shri Chamundeshwari Devi Temple, Mysore, Karnataka, 12.272769279288916, 76.67068920858286
+Sri Chennakeshava Swamy Temple, Belur, Karnataka, 13.163109844432345, 75.86035325277409
+CHOKKANATHESWHARA TEMPLE, Kanchipuram, Tamil Nadu, 12.962592774340326, 77.63523505409265
+Khaspur Ruins Of Kachari Kingdom Palace, Karimganj, Assam, 24.933468142472286, 92.93151799538225
+Maa Mahishasura Mardini Chaiturgarh, Bilaspur, Chhattisgarh, 22.511078704454924, 82.27168288637837
+Chashme Shahi Garden, Srinagar, Jammu and Kashmir, 34.08610851298034, 74.88690559573178
 Chausath Khamba and tomb of Mirza Nizammudin Aziz-ka-Kokaltash, Nizammudin, Delhi,28.59128107828908, 77.2429951378373
-Chennakeshava Swamy Temple , Belur, Karanataka, 13.360790308754472, 75.82737262564862
-Chetak Samadhi Haldighati, Udaipur, Rajasthan, 24.886944131473577, 73.6927046107233
-Brihadeeswara Temple, Thanjavur, Tamil Nadu, 10.78339099995036, 79.13128703788264
-Charminar, Hyderabad, Telangana, 17.361717843243515, 78.47471914915212
-Chor Minar No.289 Vol III, Kharehra, Delhi, 28.547848590743143, 77.20558368016442
-Daulatabad Fort, Daulatabad, Maharashtra,19.945106481242316, 75.22018218024763
-Danteswari temple, Dantewada, Chhattisgarh, 18.896999001044644, 81.34463083754297
-Daragh of Hazarat Khwaja Bande Nawaz, Gulbarga, Karnataka,17.344165144871614, 76.85099343935757
-Dariyakhan Tomb, Ahmedabad, Gujarat,23.052795692968477, 72.58672187998187
-Deeg Bhawan (Palaces), Deeg, Rajasthan, 27.47249922879247, 77.32366901108396
-Red Fort, Delhi, Delhi, 28.65644593384555, 77.24099722304388
-Kaal Bhairav Temple, Ujjain, Madhya Pradesh,23.221349313087995, 75.7693124811221
-jama masjid shahdara, Lucknow, Uttar Pradesh, 26.83888103369985, 80.83775504398662
-Shri Madhukeshwara Temple, Banavasi, Karnataka, 14.550218246403723, 75.01632580447377
-Ellora Caves, Aurangabad, Maharashtra, 20.03339680085023, 75.17605692580152
-Firoz Minar, Gaur, West Bengal,24.873987848834368, 88.13042923770907
-Gwalior Fort, Gwalior, Madhya Pradesh,26.23152657977166, 78.16945278008241
-Amber Fort, Jaipur, Rajasthan, 26.98591673050851, 75.85136685729772
-Fort of Chittaur, Chittor, Rajasthan, 24.884113350933557, 74.64731286387527
-Fort of Kumbhalgarh, Kumbhalgarh, Rajasthan,25.157416815870796, 73.58635118640491
-Teen Darwaza, Ahmedabad, Gujarat,23.024690303648843, 72.58452953765229
-Virupaksha Temple, Hampi, Karnataka, 15.33577411027167, 76.45872508751039
-Diu Fort, Diu,  Dadra and Nagar Haveli and Daman and Diu,20.719340232469992, 70.99615429096956
-Gomateshwara Statue, Shravanabelagola, Karnataka,12.854203086827965, 76.48467803742685
-Ganesh Temple, Hajo, Assam, 26.264616364666015, 91.5608257595974
-Ganesh-Ganj or Atru, Atru, Rajasthan,24.92957016469653, 76.63932488957718
-Group of Monuments at Hampi, Hampi, Karnataka, 15.335445293038196, 76.4618541003576
-Gauri Shankar Temple, Kullu, Himachal Pradesh, 32.113274258372066, 77.1641077668115
-Gangaur Ghat, Udaipur, Rajasthan24.58574275950668, 73.68152124002644
-Golkonda Fort, Hyderabad, Telangana, 17.385438025702317, 78.40092949042173
-Ancient Shri Gourishwara Swamy Temple , Mudigere, Karnataka, 12.047275286954646, 77.02988354111433
-Grave of Jahanara Begum, Delhi, Delhi, 28.591410227011334, 77.24184445502928
-Grave of Mohammed Shah, Delhi, Delhi, 28.59462071591945, 77.21824413686815
-Grishneshwar Temple, Verul, Maharashtra, 20.02502494389116, 75.16989969524175
-Khajuraho Group of Monuments, Khajuraho, Madhya Pradesh,25.030808375961442, 79.8375939090992
-Pracheen Hanuman Mandir, Connaught Place, Delhi, 28.63713302387005, 77.21486364976425
-Hatakeshwara Temple, Srisailam, Andhra Pradesh, 16.860011554870486, 78.74195328879097
-Hawa Mahal , Veerpura, Rajasthan,27.059432297533625, 75.81486441776853
-Mehrangarh Fort, Jodhpur, Rajasthan, 26.29860189072287, 73.01876000332537
-Kangra Valley, Dharamshala, Himachal Pradesh, 32.167174373054, 76.50004284693705
-Humayun's tomb, Delhi, Delhi, 28.593407240004975, 77.25072773783742
-Mahabalipuram Cave Temple, Mahabalipuram, Tamil Nadu,12.620575178576924, 80.19990322696019
-Bara Immambara, Lucknow, Uttar Pradesh,26.86884569395927, 80.91270790966081
-Iron Pillar of Delhi, Delhi, Delhi, 28.52490642564439, 77.18500891084868
-Sri Eashwara Temple, Bangalore, Karnataka,13.078827107175947, 77.56109498804574
-Ancient Shri Aghoreshwara Swamy Devalaya (Ikkeri), Kalmane, Karnataka,14.486376516738357, 75.05974562813995
-Jagannath Temple, Puri, Odisha, 19.890191176373833, 85.81244534051854
-Jogeshwari Caves, Mumbai, Maharashtra, 19.13915506240519, 72.85728991241209
-Jagner Fort, Dholpur, Rajasthan,26.86021994586051, 77.59959855126834
-Jambunathana, Madikeri, Karnataka,15.243422826246354, 76.35716905823031
-Arunachaleswarar Temple, Tiruvannamalai, Tamil Nadu,12.2458182951123, 79.06605156161218
-Jami Masjidi, Ahmedabad, Gujarat, 23.02433906567868, 72.58714291066624
-Jantar Mantar, New Delhi, Delhi, 28.627214769808, 77.21666961085249
-Jharneshwar Mahadev Waterfall,Gafarda, Madhya Pradesh,24.894414255041735, 75.2943394542728
-Jilakarragudem (Hamlet of Guntupalle), Guntupalle, Telangana, 17.01680302865559, 81.13383645079638
-Bhimeshwar Hindu Temple, Bhimtal, Uttarakhand, 29.342965570061857, 79.56321832252294
-Shri Kashi Vishwanath Temple, Varanasi, Uttar Pradesh, 25.312370984493132, 83.0105995621974
-Shri Kashi Vishwanath Temple Ganga Dwar, Varanasi, Uttar Pradesh, 25.311207127334516, 83.01265949864005
-Khandagiri Hill, Bhubaneswar, Odisha, 20.261380414637564, 85.78339701296929
-Kolaba Fort, Mumbai, Maharashtra, 18.63430354653175, 72.86447465287937
-Koppal Fort, Koppal, Karnataka, 15.34020768414027, 76.14860002212576
-Kos Minar, Delhi, Delhi, 28.547417887776138, 77.28557930898715
-Kos Minar, Delhi, Delhi, 28.609525493901575, 77.24300728917207
-Anoor megalithic Site, Thirupporur, Tamil Nadu, 12.589761187221129, 79.97424887575717
+Chennakeshava Swamy Temple , Belur, Karanataka, 12.488819511577587, 76.89106670943004
+Chetak Samadhi Haldighati, Udaipur, Rajasthan, 24.887060865152762, 73.69258656786933
+Brihadeeswara Temple, Thanjavur, Tamil Nadu, 10.78280938666706, 79.13143874531696
+Charminar, Hyderabad, Telangana, 17.36179910424972, 78.4746644951798
+Daulatabad Fort, Daulatabad, Maharashtra, 19.943904674907454, 75.22054489523973
+Danteswari temple, Dantewada, Chhattisgarh, 18.89689749524861, 81.34459865103604
+Daragh of Hazarat Khwaja Bande Nawaz, Gulbarga, Karnataka, 17.34415486143393, 76.85089685286886
+Deeg Palace, Deeg, Rajasthan, 27.47246131109988, 77.32363128937281
+Red Fort, Delhi, Delhi, 28.659628874235967, 77.24062625351176
+Kaal Bhairav Temple, Ujjain, Madhya Pradesh,23.218322337108376, 75.7687545799868
+Shri Madhukeshwara Temple, Banavasi, Karnataka, 14.535562565482236, 75.01762766444003
+Ellora Caves, Aurangabad, Maharashtra, 20.027116976078183, 75.17705468217916
+Firoz Minar, Gaur, West Bengal,24.87401704955934, 88.13040778003779
+Gwalior Fort, Gwalior, Madhya Pradesh,26.23160357118533, 78.16949569542497
+Amber Fort, Jaipur, Rajasthan, 26.985452937227695, 75.85055405312214
+Chittorgarh Fort, Chittor, Rajasthan, 24.88417296634089, 74.64736552421634
+Kumbhalgarh Fort, Kumbhalgarh, Rajasthan,25.15424314571169, 73.58700938749871
+Teen Darwaza, Ahmedabad, Gujarat,23.02468042951041, 72.58452953765229
+Virupaksha Temple, Hampi, Karnataka, 15.335319528294791, 76.4586421663038
+Diu Fort, Diu,  Dadra and Nagar Haveli and Daman and Diu,20.71489878577863, 70.99617198176635
+Gomateshwara Statue, Shravanabelagola, Karnataka,13.203976836403113, 75.00559871044595
+Gangaur Ghat, Udaipur, Rajasthan, 24.58009929696654, 73.68187185119281
+Golconda Fort, Hyderabad, Telangana, 17.38344218815075, 78.40105219518023
+Grave of Jahanara Begum, Delhi, Delhi, 28.591593488175363, 77.24194269550861
+Grishneshwar Temple, Verul, Maharashtra, 20.025093320995648, 75.16993626852893
+Khajuraho Group of Monuments, Khajuraho, Madhya Pradesh,24.831978663194445, 79.9203394328509
+Hawa Mahal , Veerpura, Rajasthan,26.924294490068455, 75.82667148010614
+Mehrangarh Fort, Jodhpur, Rajasthan, 26.298582653977775, 73.01835230757109
+Kangra Valley, Dharamshala, Himachal Pradesh, 32.16750132236222, 76.50004284693705
+Humayun's tomb, Delhi, Delhi, 28.59356021472506, 77.2506676309801
+Mahabalipuram Cave Temple, Mahabalipuram, Tamil Nadu, 12.618796127036243, 80.19834336974421
+Bara Immambara, Lucknow, Uttar Pradesh, 26.86877518299479, 80.91272342428245
+Iron Pillar of Delhi, Delhi, Delhi, 28.524972410831634, 77.18488016482101
+Ancient Shri Aghoreshwara Swamy Devalaya (Ikkeri), Kalmane, Karnataka, 14.135338486046475, 75.02260276628272
+Jagannath Temple, Puri, Odisha, 20.14894958358887, 85.84657754407799
+Jogeshwari Caves, Mumbai, Maharashtra, 19.139250819714935, 72.85711832563176
+Arunachaleswarar Temple, Tiruvannamalai, Tamil Nadu,12.232175374049314, 79.06655696579536
+Jantar Mantar, New Delhi, Delhi, 28.62726179354713, 77.21670177265828
+Jeelakarragudem (Hamlet of Guntupalle), Guntupalle, Telangana, 17.01310971032936, 81.12778538749605
+Bhimeshwar Hindu Temple, Bhimtal, Uttarakhand, 29.342965506346008, 79.56331485747802
+Shri Kashi Vishwanath Temple, Varanasi, Uttar Pradesh, 25.311032629224336, 83.01061392687258
+Khandagiri Hill, Bhubaneswar, Odisha, 20.263223771497337, 85.78357610905142
+Kolaba Fort, Mumbai, Maharashtra, 18.634449362265276, 72.86441699123576
+Koppal Fort, Koppal, Karnataka, 15.340342189753372, 76.14870731048217
